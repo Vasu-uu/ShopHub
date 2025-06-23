@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search - ShopHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        accent: '#F59E0B'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">S</span>
+                        </div>
+                        <span class="text-xl font-bold text-gray-800">ShopHub</span>
+                    </a>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-primary transition-colors">Home</a>
+                    <a href="products.html" class="text-gray-700 hover:text-primary transition-colors">Products</a>
+                    <a href="about.html" class="text-gray-700 hover:text-primary transition-colors">About</a>
+                    <a href="contact.html" class="text-gray-700 hover:text-primary transition-colors">Contact</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <a href="search.html" class="text-primary font-medium">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </a>
+                    <a href="cart.html" class="relative text-gray-700 hover:text-primary transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
+                        </svg>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-accent text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </a>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-primary">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-gray-700 hover:text-primary">Home</a>
+                <a href="products.html" class="block px-3 py-2 text-gray-700 hover:text-primary">Products</a>
+                <a href="about.html" class="block px-3 py-2 text-gray-700 hover:text-primary">About</a>
+                <a href="contact.html" class="block px-3 py-2 text-gray-700 hover:text-primary">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Header -->
+    <div class="bg-primary text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold mb-4">Search Products</h1>
+                <p class="text-xl opacity-90">Find exactly what you're looking for</p>
+            </div>
+            
+            <!-- Search Form -->
+            <div class="max-w-2xl mx-auto">
+                <form id="search-form" class="relative">
+                    <input 
+                        type="text" 
+                        id="search-input" 
+                        placeholder="Search for products, categories, or brands..." 
+                        class="w-full px-6 py-4 pr-16 text-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+                    >
+                    <button 
+                        type="submit" 
+                        class="absolute right-2 top-2 bottom-2 px-4 bg-primary text-white rounded-md hover:bg-blue-600 transition-colors"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Results -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Search Info -->
+        <div id="search-info" class="mb-8">
+            <!-- Search information will be displayed here -->
+        </div>
+
+        <!-- Quick Filters -->
+        <div id="quick-filters" class="mb-8 hidden">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Filters</h3>
+            <div class="flex flex-wrap gap-2">
+                <button onclick="filterByCategory('all')" class="filter-btn px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-primary hover:text-white transition-colors">
+                    All Categories
+                </button>
+                <button onclick="filterByCategory('electronics')" class="filter-btn px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-primary hover:text-white transition-colors">
+                    Electronics
+                </button>
+                <button onclick="filterByCategory('clothing')" class="filter-btn px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-primary hover-text-white transition-colors">
+                    Clothing
+                </button>
+                <button onclick="filterByCategory('home')" class="filter-btn px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-primary hover:text-white transition-colors">
+                    Home & Garden
+                </button>
+            </div>
+        </div>
+
+        <!-- Sort Options -->
+        <div id="sort-section" class="flex justify-between items-center mb-8 hidden">
+            <p id="results-count" class="text-gray-600"></p>
+            <select id="sort-select" class="border border-gray-300 rounded-lg px-3 py-2">
+                <option value="relevance">Sort by Relevance</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="rating">Highest Rated</option>
+                <option value="newest">Newest First</option>
+            </select>
+        </div>
+
+        <!-- Search Results Grid -->
+        <div id="search-results" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Initial state - popular products or search suggestions -->
+            <div class="col-span-full text-center py-16">
+                <svg class="mx-auto h-24 w-24 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Start Your Search</h2>
+                <p class="text-gray-600 mb-8">Enter a search term above to find products</p>
+                
+                <!-- Popular Searches -->
+                <div class="max-w-md mx-auto">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Popular Searches</h3>
+                    <div class="flex flex-wrap gap-2 justify-center">
+                        <button onclick="performSearch('headphones')" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full hover:bg-primary hover:text-white transition-colors">
+                            Headphones
+                        </button>
+                        <button onclick="performSearch('smartphone')" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full hover:bg-primary hover:text-white transition-colors">
+                            Smartphone
+                        </button>
+                        <button onclick="performSearch('jacket')" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full hover:bg-primary hover:text-white transition-colors">
+                            Jacket
+                        </button>
+                        <button onclick="performSearch('coffee table')" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full hover:bg-primary hover:text-white transition-colors">
+                            Coffee Table
+                        </button>
+                        <button onclick="performSearch('watch')" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full hover:bg-primary hover:text-white transition-colors">
+                            Watch
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- No Results Message -->
+        <div id="no-results" class="hidden col-span-full text-center py-16">
+            <svg class="mx-auto h-24 w-24 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.47-.881-6.08-2.33"></path>
+            </svg>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">No Results Found</h2>
+            <p class="text-gray-600 mb-8">We couldn't find any products matching your search.</p>
+            <div class="space-y-2">
+                <p class="text-sm text-gray-500">Try:</p>
+                <ul class="text-sm text-gray-500 space-y-1">
+                    <li>• Checking your spelling</li>
+                    <li>• Using different keywords</li>
+                    <li>• Searching for more general terms</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">S</span>
+                        </div>
+                        <span class="text-xl font-bold">ShopHub</span>
+                    </div>
+                    <p class="text-gray-300">Your premier destination for quality products at great prices.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="about.html" class="text-gray-300 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="contact.html" class="text-gray-300 hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="products.html" class="text-gray-300 hover:text-white transition-colors">Products</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Categories</h3>
+                    <ul class="space-y-2">
+                        <li><a href="category.html?category=electronics" class="text-gray-300 hover:text-white transition-colors">Electronics</a></li>
+                        <li><a href="category.html?category=clothing" class="text-gray-300 hover:text-white transition-colors">Clothing</a></li>
+                        <li><a href="category.html?category=home" class="text-gray-300 hover:text-white transition-colors">Home & Garden</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Connect</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-300">&copy; 2024 ShopHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/filters.js"></script>
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        let currentSearchResults = [];
+        let currentQuery = '';
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+            setupSearch();
+            
+            // Check for search query in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const query = urlParams.get('q');
+            if (query) {
+                document.getElementById('search-input').value = query;
+                performSearch(query);
+            }
+        });
+
+        function setupSearch() {
+            const searchForm = document.getElementById('search-form');
+            const searchInput = document.getElementById('search-input');
+            const sortSelect = document.getElementById('sort-select');
+
+            searchForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const query = searchInput.value.trim();
+                if (query) {
+                    performSearch(query);
+                }
+            });
+
+            sortSelect.addEventListener('change', function() {
+                if (currentSearchResults.length > 0) {
+                    displaySearchResults(currentSearchResults, currentQuery);
+                }
+            });
+
+            // Real-time search suggestions (optional)
+            searchInput.addEventListener('input', function() {
+                const query = this.value.trim();
+                if (query.length >= 2) {
+                    // Could implement search suggestions here
+                }
+            });
+        }
+
+        function performSearch(query) {
+            currentQuery = query;
+            document.getElementById('search-input').value = query;
+            
+            // Update URL without page reload
+            const newUrl = new URL(window.location);
+            newUrl.searchParams.set('q', query);
+            window.history.pushState({}, '', newUrl);
+
+            // Perform search
+            const results = searchProducts(getProducts(), query);
+            currentSearchResults = results;
+            
+            displaySearchResults(results, query);
+            showSearchControls(results.length > 0);
+        }
+
+        function displaySearchResults(results, query) {
+            const searchInfo = document.getElementById('search-info');
+            const searchResults = document.getElementById('search-results');
+            const noResults = document.getElementById('no-results');
+            const resultsCount = document.getElementById('results-count');
+
+            // Update search info
+            searchInfo.innerHTML = `
+                <h2 class="text-2xl font-bold text-gray-800">Search Results for "${query}"</h2>
+            `;
+
+            if (results.length === 0) {
+                searchResults.innerHTML = '';
+                noResults.classList.remove('hidden');
+                resultsCount.textContent = '';
+                return;
+            }
+
+            noResults.classList.add('hidden');
+            resultsCount.textContent = `Showing ${results.length} result${results.length !== 1 ? 's' : ''}`;
+
+            // Apply sorting
+            const sortBy = document.getElementById('sort-select').value;
+            const sortedResults = sortProducts(results, sortBy);
+
+            // Display results
+            searchResults.innerHTML = sortedResults.map(product => `
+                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow group">
+                    <a href="product-view.html?id=${product.id}">
+                        <img src="${product.images[0]}" alt="${product.name}" class="w-full h-48 object-cover group-hover:scale-105 transition-transform">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 group-hover:text-primary transition-colors">${highlightSearchTerm(product.name, query)}</h3>
+                            <p class="text-gray-600 mt-2 text-sm">${highlightSearchTerm(product.description.substring(0, 100), query)}...</p>
+                            <div class="flex items-center justify-between mt-4">
+                                <span class="text-2xl font-bold text-primary">₹${product.price}</span>
+                                <div class="flex items-center">
+                                    ${generateStars(product.rating)}
+                                    <span class="text-gray-500 text-sm ml-1">(${product.reviews})</span>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <span class="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full">
+                                    ${product.category.charAt(0).toUpperCase() + product.category.slice(1)}
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="p-6 pt-0">
+                        <button onclick="addToCart(${product.id})" class="w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showSearchControls(hasResults) {
+            const quickFilters = document.getElementById('quick-filters');
+            const sortSection = document.getElementById('sort-section');
+            
+            if (hasResults) {
+                quickFilters.classList.remove('hidden');
+                sortSection.classList.remove('hidden');
+            } else {
+                quickFilters.classList.add('hidden');
+                sortSection.classList.add('hidden');
+            }
+        }
+
+        function filterByCategory(category) {
+            if (!currentSearchResults.length) return;
+
+            let filteredResults;
+            if (category === 'all') {
+                filteredResults = currentSearchResults;
+            } else {
+                filteredResults = currentSearchResults.filter(product => product.category === category);
+            }
+
+            displaySearchResults(filteredResults, currentQuery);
+
+            // Update active filter button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('bg-primary', 'text-white');
+                btn.classList.add('text-gray-700');
+            });
+            event.target.classList.add('bg-primary', 'text-white');
+            event.target.classList.remove('text-gray-700');
+        }
+
+        function highlightSearchTerm(text, searchTerm) {
+            if (!searchTerm) return text;
+            
+            const regex = new RegExp(`(${searchTerm})`, 'gi');
+            return text.replace(regex, '<mark class="bg-yellow-200">$1</mark>');
+        }
+
+        function generateStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 !== 0;
+            let stars = '';
+            
+            for (let i = 0; i < fullStars; i++) {
+                stars += '<svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>';
+            }
+            
+            if (hasHalfStar) {
+                stars += '<svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>';
+            }
+            
+            const emptyStars = 5 - Math.ceil(rating);
+            for (let i = 0; i < emptyStars; i++) {
+                stars += '<svg class="w-4 h-4 text-gray-300 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>';
+            }
+            
+            return `<div class="flex">${stars}</div>`;
+        }
+    </script>
+</body>
+</html>
