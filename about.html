@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - ShopHub</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            background-color: #f9fafb;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+        a { text-decoration: none; color: inherit; }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 1rem; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        button { cursor: pointer; border: none; background: none; }
+
+        /* Navigation */
+        .nav {
+            background-color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky; top: 0; z-index: 50;
+        }
+        .nav-content { display: flex; justify-content: space-between; align-items: center; height: 4rem; }
+        .nav-brand { display: flex; align-items: center; gap: 0.5rem; }
+        .nav-logo {
+            width: 2rem; height: 2rem; background-color: #3B82F6; border-radius: 0.5rem;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-weight: bold; font-size: 1.25rem;
+        }
+        .nav-title { font-size: 1.25rem; font-weight: bold; }
+        .nav-links { display: none; gap: 2rem; }
+        @media (min-width: 768px) { .nav-links { display: flex; } }
+        .nav-links a { color: #4b5563; transition: color 0.2s; }
+        .nav-links a:hover { color: #3B82F6; }
+        .nav-links a.active { color: #3B82F6; font-weight: 500; }
+        .nav-icons { display: flex; align-items: center; gap: 1rem; }
+        .nav-icon { position: relative; color: #4b5563; }
+        .nav-icon svg { width: 1.25rem; height: 1.25rem; stroke: currentColor; fill: none; }
+        #cart-count {
+            position: absolute; top: -0.5rem; right: -0.5rem; background-color: #F59E0B;
+            color: #fff; font-size: 0.75rem; border-radius: 9999px;
+            width: 1.25rem; height: 1.25rem; display: flex; align-items: center; justify-content: center;
+        }
+        .mobile-menu-btn { display: block; }
+        @media (min-width: 768px) { .mobile-menu-btn { display: none; } }
+        #mobile-menu { display: none; background-color: #fff; border-top: 1px solid #e5e7eb; }
+        #mobile-menu a { display: block; padding: 0.75rem 1rem; color: #4b5563; }
+        #mobile-menu.show { display: block; }
+        
+        /* Page Header */
+        .page-header {
+            background-color: #3B82F6; color: white; padding: 4rem 1rem; text-align: center;
+        }
+        .page-header h1 { font-size: 2.5rem; font-weight: bold; margin: 0 0 1rem 0; }
+        .page-header p { font-size: 1.25rem; opacity: 0.9; margin: 0; }
+
+        /* Main Content Sections */
+        .section { padding: 4rem 0; }
+        .section-title { text-align: center; font-size: 2rem; font-weight: bold; margin: 0 auto 3rem; }
+        
+        /* Story Section */
+        .story-section {
+            text-align: center; max-width: 896px; margin: 0 auto;
+        }
+        .story-section h2 { font-size: 2rem; font-weight: bold; margin-bottom: 1.5rem; }
+        .story-section p { color: #4b5563; margin-bottom: 1rem; }
+        
+        /* Values/Features Grid */
+        .values-grid {
+            display: grid; grid-template-columns: 1fr; gap: 2rem;
+        }
+        @media (min-width: 768px) { .values-grid { grid-template-columns: repeat(3, 1fr); } }
+        .value-item { text-align: center; padding: 1.5rem; }
+        .value-icon-wrapper {
+            width: 4rem; height: 4rem; border-radius: 9999px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1rem;
+        }
+        .value-icon-wrapper svg { width: 2rem; height: 2rem; color: white; }
+        .value-icon-wrapper.bg-primary { background-color: #3B82F6; }
+        .value-icon-wrapper.bg-secondary { background-color: #10B981; }
+        .value-icon-wrapper.bg-accent { background-color: #F59E0B; }
+        .value-item h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; }
+        .value-item p { color: #4b5563; }
+
+        /* Why Choose Us Section */
+        .why-choose-us-section {
+            background-color: #fff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 2rem;
+        }
+        .why-choose-us-grid {
+            display: grid; grid-template-columns: 1fr; gap: 2rem;
+        }
+        @media (min-width: 768px) { .why-choose-us-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1024px) { .why-choose-us-grid { grid-template-columns: repeat(4, 1fr); } }
+        .feature-item { text-align: center; }
+        .feature-icon-wrapper {
+            width: 3rem; height: 3rem; border-radius: 0.5rem;
+            display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;
+        }
+        .feature-icon-wrapper svg { width: 1.5rem; height: 1.5rem; }
+        .feature-item .bg-blue { background-color: #dbeafe; color: #3B82F6; }
+        .feature-item .bg-green { background-color: #d1fae5; color: #10B981; }
+        .feature-item .bg-yellow { background-color: #fef3c7; color: #F59E0B; }
+        .feature-item .bg-purple { background-color: #ede9fe; color: #8b5cf6; }
+        .feature-item h3 { font-weight: 600; margin-bottom: 0.5rem; }
+        .feature-item p { font-size: 0.875rem; color: #4b5563; }
+
+        /* Testimonials */
+        .testimonial-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+        @media (min-width: 768px) { .testimonial-grid { grid-template-columns: repeat(3, 1fr); } }
+        .testimonial-card {
+            background-color: #fff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+        }
+        .testimonial-rating { display: flex; margin-bottom: 1rem; color: #facc15; }
+        .testimonial-rating svg { width: 1.25rem; height: 1.25rem; }
+        .testimonial-card p { color: #4b5563; margin-bottom: 1rem; }
+        .testimonial-author { display: flex; align-items: center; }
+        .author-initials {
+            width: 2.5rem; height: 2.5rem; background-color: #e5e7eb;
+            border-radius: 9999px; display: flex; align-items: center;
+            justify-content: center; margin-right: 0.75rem;
+            color: #4b5563; font-weight: 600;
+        }
+        .author-details p { margin: 0; }
+        .author-name { font-weight: 600; }
+        .author-status { font-size: 0.875rem; color: #6b7280; }
+
+        /* Call to Action */
+        .cta-section {
+            background-color: #3B82F6; color: white; border-radius: 0.5rem;
+            padding: 3rem; text-align: center;
+        }
+        .cta-section h2 { font-size: 2rem; font-weight: bold; margin: 0 0 1rem; }
+        .cta-section p { font-size: 1.25rem; margin-bottom: 2rem; opacity: 0.9; }
+        .cta-button {
+            background-color: white; color: #3B82F6; padding: 0.75rem 2rem;
+            border-radius: 0.5rem; font-weight: 600; transition: background-color 0.2s;
+        }
+        .cta-button:hover { background-color: #f3f4f6; }
+        
+        /* Footer */
+        .footer {
+            background-color: #1f2937;
+            color: #d1d5db;
+            padding: 3rem 0;
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        @media (min-width: 768px) {
+            .footer-content {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        .footer-brand .nav-title {
+            color: #fff;
+        }
+        .footer-description {
+            margin-top: 1rem;
+        }
+        .footer-heading {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        .footer-links a:hover {
+            color: #fff;
+            transition: color 0.2s;
+        }
+        .footer-socials {
+            display: flex;
+            gap: 1rem;
+        }
+        .footer-socials a:hover {
+            color: #fff;
+            transition: color 0.2s;
+        }
+        .footer-socials svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            fill: currentColor;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="container nav-content">
+            <a href="index.html" class="nav-brand"><div class="nav-logo">S</div><span class="nav-title">ShopHub</span></a>
+            <div class="nav-links">
+                <a href="index.html">Home</a><a href="products.html">Products</a><a href="about.html" class="active">About</a><a href="contact.html">Contact</a>
+            </div>
+            <div class="nav-icons">
+                <a href="search.html" class="nav-icon"><svg><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></a>
+                <a href="cart.html" class="nav-icon">
+                    <svg><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path></svg>
+                    <span id="cart-count">0</span>
+                </a>
+                <button id="mobile-menu-btn" class="mobile-menu-btn"><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
+            </div>
+        </div>
+        <div id="mobile-menu">
+            <a href="index.html">Home</a><a href="products.html">Products</a><a href="about.html" class="active">About</a><a href="contact.html">Contact</a>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <h1>About ShopHub</h1>
+            <p>Your trusted partner in premium shopping</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="section story-section">
+            <h2>Our Story</h2>
+            <p>Founded in 2025, ShopHub began with a simple mission: to make premium products accessible to everyone. What started as a small online store has grown into a trusted marketplace serving thousands of customers worldwide.</p>
+            <p>We believe that shopping should be more than just a transaction – it should be an experience. That's why we carefully curate our product selection, ensuring that every item meets our high standards for quality, functionality, and value.</p>
+            <p>Today, ShopHub continues to evolve, always putting our customers first and striving to exceed expectations with every order.</p>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Our Mission & Values</h2>
+            <div class="values-grid">
+                <div class="value-item">
+                    <div class="value-icon-wrapper bg-primary"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                    <h3>Quality First</h3>
+                    <p>We never compromise on quality. Every product is carefully selected and tested to ensure it meets our rigorous standards.</p>
+                </div>
+                <div class="value-item">
+                    <div class="value-icon-wrapper bg-secondary"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg></div>
+                    <h3>Customer Focused</h3>
+                    <p>Our customers are at the heart of everything we do. We listen, adapt, and continuously improve based on your feedback.</p>
+                </div>
+                <div class="value-item">
+                    <div class="value-icon-wrapper bg-accent"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></div>
+                    <h3>Innovation</h3>
+                    <p>We embrace new technologies and ideas to make your shopping experience better, faster, and more enjoyable.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section why-choose-us-section">
+            <h2 class="section-title">Why Choose ShopHub?</h2>
+            <div class="why-choose-us-grid">
+                <div class="feature-item">
+                    <div class="feature-icon-wrapper bg-blue"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg></div>
+                    <h3>Free Shipping</h3><p>Free shipping on orders over ₹500</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon-wrapper bg-green"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                    <h3>Quality Guarantee</h3><p>100% satisfaction guaranteed</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon-wrapper bg-yellow"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                    <h3>Fast Delivery</h3><p>Quick and reliable shipping</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon-wrapper bg-purple"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364"></path></svg></div>
+                    <h3>24/7 Support</h3><p>Always here to help you</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">What Our Customers Say</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-rating">
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                    </div>
+                    <p>"ShopHub has become my go-to store for everything. The quality is outstanding and the customer service is exceptional. Highly recommended!"</p>
+                    <div class="testimonial-author"><div class="author-initials">PK</div><div class="author-details"><p class="author-name">Priya Kumar</p><p class="author-status">Verified Customer</p></div></div>
+                </div>
+                <div class="testimonial-card">
+                     <div class="testimonial-rating">
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                    </div>
+                    <p>"Fast shipping, great prices, and amazing product quality. I've been shopping here for over a year and never been disappointed."</p>
+                    <div class="testimonial-author"><div class="author-initials">RS</div><div class="author-details"><p class="author-name">Rahul Sharma</p><p class="author-status">Verified Customer</p></div></div>
+                </div>
+                <div class="testimonial-card">
+                     <div class="testimonial-rating">
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                    </div>
+                    <p>"The website is easy to navigate, checkout is smooth, and I love the variety of products available. Will definitely shop here again!"</p>
+                    <div class="testimonial-author"><div class="author-initials">AP</div><div class="author-details"><p class="author-name">Ananya Patel</p><p class="author-status">Verified Customer</p></div></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section cta-section">
+            <h2>Ready to Start Shopping?</h2>
+            <p>Join thousands of satisfied customers and discover premium products at great prices.</p>
+            <a href="products.html" class="cta-button">Browse Products</a>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="nav-brand">
+                        <div class="nav-logo">S</div>
+                        <span class="nav-title">ShopHub</span>
+                    </div>
+                    <p class="footer-description">Your premier destination for quality products at great prices.</p>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="products.html">Products</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Categories</h3>
+                    <ul class="footer-links">
+                        <li><a href="category.html?category=electronics">Electronics</a></li>
+                        <li><a href="category.html?category=clothing">Clothing</a></li>
+                        <li><a href="category.html?category=home">Home & Garden</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Connect</h3>
+                    <div class="footer-socials">
+                        <a href="#"><svg viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg></a>
+                        <a href="#"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                        <a href="#"><svg viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/cart.js"></script>
+    <script>
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('show');
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+        });
+    </script>
+</body>
+</html>

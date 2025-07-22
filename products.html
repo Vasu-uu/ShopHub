@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - ShopHub</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            background-color: #f9fafb;
+            color: #1f2937;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Navigation */
+        .nav {
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 4rem;
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .nav-logo {
+            width: 2rem;
+            height: 2rem;
+            background-color: #3B82F6;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+        .nav-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        .nav-links {
+            display: none;
+            gap: 2rem;
+        }
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+        }
+        .nav-links a {
+            color: #4b5563;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover {
+            color: #3B82F6;
+        }
+        .nav-links a.active {
+            color: #3B82F6;
+            font-weight: 500;
+        }
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .nav-icon {
+            position: relative;
+            color: #4b5563;
+        }
+        .nav-icon:hover {
+            color: #3B82F6;
+        }
+        .nav-icon svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            stroke: currentColor;
+            fill: none;
+        }
+        #cart-count {
+            position: absolute;
+            top: -0.5rem;
+            right: -0.5rem;
+            background-color: #F59E0B;
+            color: #fff;
+            font-size: 0.75rem;
+            border-radius: 9999px;
+            width: 1.25rem;
+            height: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .mobile-menu-btn {
+            display: block;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        @media (min-width: 768px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+        #mobile-menu {
+            display: none;
+            background-color: #fff;
+            border-top: 1px solid #e5e7eb;
+        }
+        #mobile-menu a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #4b5563;
+        }
+        #mobile-menu a:hover {
+            color: #3B82F6;
+        }
+        #mobile-menu.show {
+            display: block;
+        }
+        
+        /* Page Header */
+        .page-header {
+            background-color: #3B82F6;
+            color: white;
+            padding: 4rem 1rem;
+            text-align: center;
+        }
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0 0 1rem 0;
+        }
+        .page-header p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        /* Main Content Layout */
+        .main-content {
+            padding: 3rem 0;
+        }
+        .products-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        @media (min-width: 1024px) {
+            .products-layout {
+                grid-template-columns: 1fr 3fr;
+            }
+        }
+
+        /* Filters Sidebar */
+        .filters-sidebar {
+            background-color: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        @media (min-width: 1024px) {
+            .filters-sidebar {
+                margin-bottom: 0;
+            }
+        }
+        .filters-sidebar h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 0 0 1rem 0;
+        }
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+        .filter-group h4 {
+            font-weight: 500;
+            margin: 0 0 0.75rem 0;
+        }
+        .filter-group label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+        }
+        .filter-group input[type="radio"] {
+            margin-right: 0.5rem;
+            accent-color: #3B82F6;
+        }
+        .filter-group select {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            cursor: pointer;
+        }
+
+        /* Products Grid */
+        .products-grid-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        #product-count {
+            color: #4b5563;
+        }
+        #mobile-filter-btn {
+            display: block;
+            background-color: #3B82F6;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+        @media (min-width: 1024px) {
+            #mobile-filter-btn {
+                display: none;
+            }
+        }
+        #products-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: 1fr;
+        }
+        @media (min-width: 768px) {
+            #products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1024px) {
+            #products-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        /* Product Card */
+        .card {
+            background-color: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        .card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+        .card a {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .card img {
+            width: 100%;
+            height: 12rem;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        .card:hover img {
+            transform: scale(1.05);
+        }
+        .card-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+        }
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .card:hover .card-title {
+            color: #3B82F6;
+        }
+        .card-description {
+            color: #4b5563;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+        }
+        .card-actions {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3B82F6;
+        }
+        .card-rating {
+            display: flex;
+            align-items: center;
+        }
+        .stars { display: flex; }
+        .stars svg {
+            width: 1rem;
+            height: 1rem;
+            fill: #FBBF24;
+        }
+        .review-count {
+            margin-left: 0.25rem;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        .card-footer {
+            padding: 0 1.5rem 1.5rem;
+        }
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background-color: #3B82F6;
+            color: #fff;
+        }
+        .btn:hover {
+            background-color: #2563EB;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #1f2937;
+            color: #d1d5db;
+            padding: 3rem 0;
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        @media (min-width: 768px) {
+            .footer-content {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        .footer-brand .nav-title {
+            color: #fff;
+        }
+        .footer-description {
+            margin-top: 1rem;
+        }
+        .footer-heading {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        .footer-links a:hover {
+            color: #fff;
+            transition: color 0.2s;
+        }
+        .footer-socials {
+            display: flex;
+            gap: 1rem;
+        }
+        .footer-socials a:hover {
+            color: #fff;
+            transition: color 0.2s;
+        }
+        .footer-socials svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            fill: currentColor;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="container nav-content">
+            <a href="index.html" class="nav-brand">
+                <div class="nav-logo">S</div>
+                <span class="nav-title">ShopHub</span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="products.html" class="active">Products</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            
+            <div class="nav-icons">
+                <a href="search.html" class="nav-icon">
+                    <svg><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </a>
+                <a href="cart.html" class="nav-icon">
+                    <svg><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path></svg>
+                    <span id="cart-count">0</span>
+                </a>
+                <button id="mobile-menu-btn" class="mobile-menu-btn">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+            </div>
+        </div>
+        
+        <div id="mobile-menu">
+            <a href="index.html">Home</a>
+            <a href="products.html" class="active">Products</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <h1>Our Products</h1>
+            <p>Discover our full range of premium products</p>
+        </div>
+    </header>
+
+    <main class="container main-content">
+        <div class="products-layout">
+            <aside>
+                <div class="filters-sidebar">
+                    <h3>Filters</h3>
+                    
+                    <div class="filter-group">
+                        <h4>Category</h4>
+                        <div>
+                            <label><input type="radio" name="category" value="all" checked><span>All Categories</span></label>
+                            <label><input type="radio" name="category" value="electronics"><span>Electronics</span></label>
+                            <label><input type="radio" name="category" value="clothing"><span>Clothing</span></label>
+                            <label><input type="radio" name="category" value="home"><span>Home & Garden</span></label>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <h4>Price Range</h4>
+                        <div>
+                            <label><input type="radio" name="price" value="all" checked><span>All Prices</span></label>
+                            <label><input type="radio" name="price" value="0-50"><span>₹0 - ₹50</span></label>
+                            <label><input type="radio" name="price" value="50-200"><span>₹50 - ₹200</span></label>
+                            <label><input type="radio" name="price" value="200-500"><span>₹200 - ₹500</span></label>
+                            <label><input type="radio" name="price" value="500+"><span>₹500+</span></label>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4>Sort By</h4>
+                        <select id="sort-select">
+                            <option value="featured">Featured</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="rating">Highest Rated</option>
+                        </select>
+                    </div>
+                </div>
+            </aside>
+            
+            <section>
+                <div class="products-grid-controls">
+                    <p id="product-count">Showing all products</p>
+                    <button id="mobile-filter-btn">Filters</button>
+                </div>
+                
+                <div id="products-grid">
+                    </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="nav-brand">
+                        <div class="nav-logo">S</div>
+                        <span class="nav-title">ShopHub</span>
+                    </div>
+                    <p class="footer-description">Your premier destination for quality products at great prices.</p>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="products.html">Products</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Categories</h3>
+                    <ul class="footer-links">
+                        <li><a href="category.html?category=electronics">Electronics</a></li>
+                        <li><a href="category.html?category=clothing">Clothing</a></li>
+                        <li><a href="category.html?category=home">Home & Garden</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Connect</h3>
+                    <div class="footer-socials">
+                        <a href="#"><svg viewBox="0 0 24 24"><path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/></svg></a>
+                        <a href="#"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                        <a href="#"><svg viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="js/data.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/filters.js"></script>
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('show');
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+            loadProducts();
+            setupFilters();
+        });
+
+        let allProducts = [];
+        let filteredProducts = [];
+
+        function loadProducts() {
+            allProducts = getProducts();
+            filteredProducts = [...allProducts];
+            displayProducts(filteredProducts);
+        }
+
+        function displayProducts(products) {
+            const productsGrid = document.getElementById('products-grid');
+            const productCount = document.getElementById('product-count');
+            
+            productCount.textContent = `Showing ${products.length} product${products.length !== 1 ? 's' : ''}`;
+            
+            if (products.length === 0) {
+                productsGrid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 3rem 0;"><p>No products found matching your criteria.</p></div>`;
+                return;
+            }
+            
+            productsGrid.innerHTML = products.map(product => `
+                <div class="card">
+                    <a href="product-view.html?id=${product.id}">
+                        <img src="${product.images[0]}" alt="${product.name}">
+                        <div class="card-content">
+                            <h3 class="card-title">${product.name}</h3>
+                            <p class="card-description">${product.description.substring(0, 100)}...</p>
+                            <div class="card-actions">
+                                <span class="card-price">₹${product.price}</span>
+                                <div class="card-rating">
+                                    <div class="stars">${generateStars(product.rating)}</div>
+                                    <span class="review-count">(${product.reviews})</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="card-footer">
+                        <button onclick="addToCart(${product.id})" class="btn">Add to Cart</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function setupFilters() {
+            const categoryFilters = document.querySelectorAll('input[name="category"]');
+            categoryFilters.forEach(filter => filter.addEventListener('change', applyFilters));
+
+            const priceFilters = document.querySelectorAll('input[name="price"]');
+            priceFilters.forEach(filter => filter.addEventListener('change', applyFilters));
+
+            document.getElementById('sort-select').addEventListener('change', applyFilters);
+        }
+
+        function applyFilters() {
+            let products = [...allProducts];
+
+            // Category filter
+            const selectedCategory = document.querySelector('input[name="category"]:checked').value;
+            if (selectedCategory !== 'all') {
+                products = products.filter(p => p.category === selectedCategory);
+            }
+
+            // Price filter
+            const selectedPrice = document.querySelector('input[name="price"]:checked').value;
+            if (selectedPrice !== 'all') {
+                if (selectedPrice === '500+') {
+                    products = products.filter(p => p.price > 500);
+                } else {
+                    const [min, max] = selectedPrice.split('-').map(Number);
+                    products = products.filter(p => p.price >= min && p.price <= max);
+                }
+            }
+
+            // Sorting
+            const sortBy = document.getElementById('sort-select').value;
+            switch (sortBy) {
+                case 'price-low': products.sort((a, b) => a.price - b.price); break;
+                case 'price-high': products.sort((a, b) => b.price - a.price); break;
+                case 'rating': products.sort((a, b) => b.rating - a.rating); break;
+            }
+
+            filteredProducts = products;
+            displayProducts(filteredProducts);
+        }
+
+        function generateStars(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                stars += `<svg style="color:${i <= rating ? '#FBBF24' : '#d1d5db'}" fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>`;
+            }
+            return stars;
+        }
+    </script>
+</body>
+</html>

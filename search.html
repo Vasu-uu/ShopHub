@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search - ShopHub</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            background-color: #f9fafb;
+            color: #1f2937;
+        }
+        a { text-decoration: none; color: inherit; }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 1rem; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        button { cursor: pointer; border: none; background: none; }
+        .hidden { display: none; }
+
+        /* Navigation */
+        .nav { background-color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 50; }
+        .nav-content { display: flex; justify-content: space-between; align-items: center; height: 4rem; }
+        .nav-brand { display: flex; align-items: center; gap: 0.5rem; }
+        .nav-logo {
+            width: 2rem; height: 2rem; background-color: #3B82F6; border-radius: 0.5rem; display: flex;
+            align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 1.25rem;
+        }
+        .nav-title { font-size: 1.25rem; font-weight: bold; }
+        .nav-links { display: none; gap: 2rem; }
+        @media (min-width: 768px) { .nav-links { display: flex; } }
+        .nav-links a { color: #4b5563; transition: color 0.2s; }
+        .nav-links a:hover { color: #3B82F6; }
+        .nav-icons { display: flex; align-items: center; gap: 1rem; }
+        .nav-icon { position: relative; color: #4b5563; }
+        .nav-icon.active { color: #3B82F6; }
+        .nav-icon svg { width: 1.25rem; height: 1.25rem; stroke: currentColor; fill: none; }
+        #cart-count {
+            position: absolute; top: -0.5rem; right: -0.5rem; background-color: #F59E0B; color: #fff;
+            font-size: 0.75rem; border-radius: 9999px; width: 1.25rem; height: 1.25rem;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .mobile-menu-btn { display: block; }
+        @media (min-width: 768px) { .mobile-menu-btn { display: none; } }
+        #mobile-menu { display: none; background-color: #fff; border-top: 1px solid #e5e7eb; }
+        #mobile-menu a { display: block; padding: 0.75rem 1rem; color: #4b5563; }
+        #mobile-menu.show { display: block; }
+
+        /* Search Header */
+        .search-header { background-color: #3B82F6; color: white; padding: 4rem 1rem; }
+        .search-header-content { max-width: 768px; margin: 0 auto; }
+        .search-header-text { text-align: center; margin-bottom: 2rem; }
+        .search-header-text h1 { font-size: 2.5rem; font-weight: bold; margin: 0 0 1rem; }
+        .search-header-text p { font-size: 1.25rem; opacity: 0.9; margin: 0; }
+        
+        #search-form { position: relative; }
+        #search-input {
+            width: 100%; box-sizing: border-box; padding: 1rem 4rem 1rem 1.5rem;
+            color: #1f2937; border-radius: 0.5rem; border: none;
+        }
+        #search-input:focus { outline: 2px solid white; }
+        #search-form button {
+            position: absolute; right: 0.5rem; top: 0.5rem; bottom: 0.5rem;
+            padding: 0 1rem; background-color: #3B82F6; color: white;
+            border-radius: 0.375rem; transition: background-color 0.2s;
+        }
+        #search-form button:hover { background-color: #2563EB; }
+
+        /* Search Results Section */
+        .search-results-section { padding: 3rem 0; }
+        #search-info h2 { font-size: 1.5rem; font-weight: bold; margin-bottom: 2rem; }
+        
+        /* Filters & Sorting */
+        #quick-filters { margin-bottom: 2rem; }
+        #quick-filters h3 { font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; }
+        #quick-filters .filters-container { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .filter-btn {
+            padding: 0.5rem 1rem; border-radius: 9999px; border: 1px solid #d1d5db;
+            color: #374151; transition: background-color 0.2s, color 0.2s;
+        }
+        .filter-btn.active, .filter-btn:hover { background-color: #3B82F6; color: white; border-color: #3B82F6; }
+        
+        #sort-section {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;
+        }
+        #results-count { color: #4b5563; }
+        #sort-select { border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 0.5rem 0.75rem; }
+
+        /* Initial & No Results State */
+        .placeholder-view {
+            text-align: center; padding: 4rem 0;
+            grid-column: 1 / -1; /* Span all grid columns */
+        }
+        .placeholder-view svg { margin: 0 auto 1rem; width: 6rem; height: 6rem; color: #9ca3af; }
+        .placeholder-view h2 { font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem; }
+        .placeholder-view p { color: #4b5563; margin-bottom: 2rem; }
+        .popular-searches { max-width: 448px; margin: 0 auto; }
+        .popular-searches h3 { font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; }
+        .popular-searches div { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+        .popular-searches button {
+            padding: 0.5rem 1rem; background-color: #f3f4f6; color: #374151;
+            border-radius: 9999px; transition: background-color 0.2s, color 0.2s;
+        }
+        .popular-searches button:hover { background-color: #3B82F6; color: white; }
+
+        #no-results ul { list-style-type: disc; padding-left: 1.25rem; display: inline-block; text-align: left; }
+        
+        /* Results Grid & Cards */
+        #search-results { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
+        @media (min-width: 640px) { #search-results { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1024px) { #search-results { grid-template-columns: repeat(4, 1fr); } }
+        mark { background-color: #fef08a; padding: 0 2px; border-radius: 2px; }
+        .card {
+            background-color: #fff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden; transition: box-shadow 0.3s; display: flex; flex-direction: column;
+        }
+        .card:hover { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .card a { display: flex; flex-direction: column; flex-grow: 1; }
+        .card img { width: 100%; height: 12rem; object-fit: cover; transition: transform 0.3s; }
+        .card:hover img { transform: scale(1.05); }
+        .card-content { padding: 1.5rem; flex-grow: 1; }
+        .card-title { font-size: 1.125rem; font-weight: 600; transition: color 0.3s; }
+        .card:hover .card-title { color: #3B82F6; }
+        .card-description { color: #4b5563; margin-top: 0.5rem; font-size: 0.875rem; }
+        .card-footer { padding: 0 1.5rem 1.5rem; }
+        .btn-card {
+            width: 100%; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 600;
+            text-align: center; background-color: #3B82F6; color: #fff;
+        }
+        .btn-card:hover { background-color: #2563EB; }
+
+        /* Footer */
+        .footer {
+            background-color: #1f2937;
+            color: #d1d5db;
+            padding: 3rem 0;
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        @media (min-width: 768px) {
+            .footer-content {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        .footer-brand .nav-title {
+            color: #fff;
+        }
+        .footer-description {
+            margin-top: 1rem;
+        }
+        .footer-heading {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        .footer-links a:hover {
+            color: #fff;
+            transition: color 0.2s;
+        }
+        .footer-socials {
+            display: flex;
+            gap: 1rem;
+        }
+        .footer-socials a:hover {
+            color: #fff;
+            transition: color 0.2s;
+        }
+        .footer-socials svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            fill: currentColor;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="container nav-content">
+            <a href="index.html" class="nav-brand"><div class="nav-logo">S</div><span class="nav-title">ShopHub</span></a>
+            <div class="nav-links">
+                <a href="index.html">Home</a><a href="products.html">Products</a><a href="about.html">About</a><a href="contact.html">Contact</a>
+            </div>
+            <div class="nav-icons">
+                <a href="search.html" class="nav-icon active"><svg><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></a>
+                <a href="cart.html" class="nav-icon">
+                    <svg><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path></svg>
+                    <span id="cart-count">0</span>
+                </a>
+                <button id="mobile-menu-btn" class="mobile-menu-btn"><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
+            </div>
+        </div>
+        <div id="mobile-menu">
+            <a href="index.html">Home</a><a href="products.html">Products</a><a href="about.html">About</a><a href="contact.html">Contact</a>
+        </div>
+    </nav>
+
+    <header class="search-header">
+        <div class="search-header-content">
+            <div class="search-header-text">
+                <h1>Search Products</h1>
+                <p>Find exactly what you're looking for</p>
+            </div>
+            <form id="search-form">
+                <input type="text" id="search-input" placeholder="Search for products, categories, or brands...">
+                <button type="submit">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </button>
+            </form>
+        </div>
+    </header>
+
+    <main class="container search-results-section">
+        <div id="search-info"></div>
+
+        <div id="quick-filters" class="hidden">
+            <h3>Quick Filters</h3>
+            <div class="filters-container">
+                <button onclick="filterByCategory('all')" class="filter-btn active">All Categories</button>
+                <button onclick="filterByCategory('electronics')" class="filter-btn">Electronics</button>
+                <button onclick="filterByCategory('clothing')" class="filter-btn">Clothing</button>
+                <button onclick="filterByCategory('home')" class="filter-btn">Home & Garden</button>
+            </div>
+        </div>
+
+        <div id="sort-section" class="hidden">
+            <p id="results-count"></p>
+            <select id="sort-select">
+                <option value="relevance">Sort by Relevance</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="rating">Highest Rated</option>
+                <option value="newest">Newest First</option>
+            </select>
+        </div>
+
+        <div id="search-results">
+            <div class="placeholder-view">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <h2>Start Your Search</h2>
+                <p>Enter a search term above to find products</p>
+                <div class="popular-searches">
+                    <h3>Popular Searches</h3>
+                    <div>
+                        <button onclick="performSearch('headphones')">Headphones</button>
+                        <button onclick="performSearch('smartphone')">Smartphone</button>
+                        <button onclick="performSearch('jacket')">Jacket</button>
+                        <button onclick="performSearch('coffee table')">Coffee Table</button>
+                        <button onclick="performSearch('watch')">Watch</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="no-results" class="placeholder-view hidden">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.47-.881-6.08-2.33"></path></svg>
+            <h2>No Results Found</h2>
+            <p>We couldn't find any products matching your search.</p>
+            <div>
+                <p>Try:</p>
+                <ul>
+                    <li>Checking your spelling</li>
+                    <li>Using different keywords</li>
+                    <li>Searching for more general terms</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="nav-brand">
+                        <div class="nav-logo">S</div>
+                        <span class="nav-title">ShopHub</span>
+                    </div>
+                    <p class="footer-description">Your premier destination for quality products at great prices.</p>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="products.html">Products</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Categories</h3>
+                    <ul class="footer-links">
+                        <li><a href="category.html?category=electronics">Electronics</a></li>
+                        <li><a href="category.html?category=clothing">Clothing</a></li>
+                        <li><a href="category.html?category=home">Home & Garden</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Connect</h3>
+                    <div class="footer-socials">
+                        <a href="#"><svg viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg></a>
+                        <a href="#"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                        <a href="#"><svg viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/filters.js"></script>
+    <script>
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('show');
+        });
+
+        let currentSearchResults = [];
+        let originalSearchResults = [];
+        let currentQuery = '';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartCount();
+            setupSearch();
+            const query = new URLSearchParams(window.location.search).get('q');
+            if (query) {
+                document.getElementById('search-input').value = query;
+                performSearch(query);
+            }
+        });
+
+        function setupSearch() {
+            document.getElementById('search-form').addEventListener('submit', e => {
+                e.preventDefault();
+                const query = document.getElementById('search-input').value.trim();
+                if (query) performSearch(query);
+            });
+            document.getElementById('sort-select').addEventListener('change', () => {
+                if (originalSearchResults.length > 0) displaySearchResults(currentSearchResults, currentQuery);
+            });
+        }
+
+        function performSearch(query) {
+            currentQuery = query;
+            document.getElementById('search-input').value = query;
+            const newUrl = `${window.location.pathname}?q=${encodeURIComponent(query)}`;
+            window.history.pushState({}, '', newUrl);
+
+            const results = searchProducts(getProducts(), query);
+            originalSearchResults = results;
+            currentSearchResults = results;
+            
+            displaySearchResults(results, query);
+            showSearchControls(results.length > 0);
+        }
+
+        function displaySearchResults(results, query) {
+            const searchInfo = document.getElementById('search-info');
+            const searchResultsEl = document.getElementById('search-results');
+            const noResultsEl = document.getElementById('no-results');
+            const resultsCount = document.getElementById('results-count');
+
+            searchInfo.innerHTML = `<h2>Search Results for "${query}"</h2>`;
+            
+            if (results.length === 0) {
+                searchResultsEl.innerHTML = '';
+                noResultsEl.classList.remove('hidden');
+                resultsCount.textContent = '';
+                return;
+            }
+
+            noResultsEl.classList.add('hidden');
+            resultsCount.textContent = `Showing ${results.length} result${results.length !== 1 ? 's' : ''}`;
+
+            const sortBy = document.getElementById('sort-select').value;
+            const sortedResults = sortProducts([...results], sortBy);
+
+            searchResultsEl.innerHTML = sortedResults.map(product => `
+                <div class="card">
+                    <a href="product-view.html?id=${product.id}">
+                        <img src="${product.images[0]}" alt="${product.name}">
+                        <div class="card-content">
+                            <h3 class="card-title">${highlightSearchTerm(product.name, query)}</h3>
+                            <p class="card-description">${highlightSearchTerm(product.description.substring(0, 100), query)}...</p>
+                        </div>
+                    </a>
+                    <div class="card-footer">
+                        <button onclick="addToCart(${product.id})" class="btn-card">Add to Cart</button>
+                    </div>
+                </div>`).join('');
+        }
+
+        function showSearchControls(hasResults) {
+            document.getElementById('quick-filters').classList.toggle('hidden', !hasResults);
+            document.getElementById('sort-section').classList.toggle('hidden', !hasResults);
+        }
+        
+        function filterByCategory(category) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (category === 'all') {
+                currentSearchResults = originalSearchResults;
+            } else {
+                currentSearchResults = originalSearchResults.filter(p => p.category === category);
+            }
+            displaySearchResults(currentSearchResults, currentQuery);
+        }
+
+        function highlightSearchTerm(text, term) {
+            if (!term) return text;
+            const regex = new RegExp(`(${term})`, 'gi');
+            return text.replace(regex, '<mark>$1</mark>');
+        }
+    </script>
+</body>
+</html>

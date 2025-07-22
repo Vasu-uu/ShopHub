@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - ShopHub</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            background-color: #f9fafb;
+            color: #1f2937;
+        }
+        a { text-decoration: none; color: inherit; }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 1rem; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        button { cursor: pointer; border: none; background: none; }
+
+        /* Navigation */
+        .nav {
+            background-color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky; top: 0; z-index: 50;
+        }
+        .nav-content { display: flex; justify-content: space-between; align-items: center; height: 4rem; }
+        .nav-brand { display: flex; align-items: center; gap: 0.5rem; }
+        .nav-logo {
+            width: 2rem; height: 2rem; background-color: #3B82F6; border-radius: 0.5rem;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-weight: bold; font-size: 1.25rem;
+        }
+        .nav-title { font-size: 1.25rem; font-weight: bold; }
+        .nav-links { display: none; gap: 2rem; }
+        @media (min-width: 768px) { .nav-links { display: flex; } }
+        .nav-links a { color: #4b5563; transition: color 0.2s; }
+        .nav-links a:hover { color: #3B82F6; }
+        .nav-icons { display: flex; align-items: center; gap: 1rem; }
+        .nav-icon { position: relative; color: #4b5563; }
+        .nav-icon svg { width: 1.25rem; height: 1.25rem; stroke: currentColor; fill: none; }
+        #cart-count {
+            position: absolute; top: -0.5rem; right: -0.5rem; background-color: #F59E0B;
+            color: #fff; font-size: 0.75rem; border-radius: 9999px;
+            width: 1.25rem; height: 1.25rem; display: flex; align-items: center; justify-content: center;
+        }
+        .mobile-menu-btn { display: block; }
+        @media (min-width: 768px) { .mobile-menu-btn { display: none; } }
+        #mobile-menu { display: none; background-color: #fff; border-top: 1px solid #e5e7eb; }
+        #mobile-menu a { display: block; padding: 0.75rem 1rem; color: #4b5563; }
+        #mobile-menu.show { display: block; }
+        
+        /* Page Header */
+        .page-header {
+            background-color: #3B82F6; color: white; padding: 4rem 1rem; text-align: center;
+        }
+        .page-header h1 { font-size: 2.5rem; font-weight: bold; margin: 0 0 1rem 0; }
+        .page-header p { font-size: 1.25rem; opacity: 0.9; margin: 0; }
+        
+        /* Checkout Layout */
+        .main-content { padding: 3rem 0; }
+        .checkout-layout {
+            display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: start;
+        }
+        @media (min-width: 1024px) {
+            .checkout-layout { grid-template-columns: 7fr 5fr; }
+        }
+
+        /* Form Styling */
+        .form-section {
+            background-color: #fff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 1.5rem; margin-bottom: 2rem;
+        }
+        .form-section h2 {
+            font-size: 1.25rem; font-weight: 600; margin: 0 0 1.5rem;
+        }
+        .form-grid {
+            display: grid; grid-template-columns: 1fr; gap: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .form-grid { grid-template-columns: 1fr 1fr; }
+        }
+        .form-grid .col-span-2 {
+            grid-column: span 2 / span 2;
+        }
+        .form-field label {
+            display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;
+        }
+        .form-field input, .form-field select {
+            width: 100%; border: 1px solid #d1d5db; border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem; box-sizing: border-box;
+        }
+        .form-field input:focus, .form-field select:focus {
+            outline: none; border-color: #3B82F6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4);
+        }
+        .error-message {
+            color: #dc2626; font-size: 0.875rem; margin-top: 0.25rem;
+        }
+        .hidden {
+            display: none;
+        }
+        .border-red-500 { /* For JS compatibility */
+            border-color: #dc2626 !important;
+        }
+
+        /* Order Summary Card */
+        .order-summary-card {
+            background-color: #fff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 1.5rem; position: sticky; top: 5rem;
+        }
+        .order-summary-card h2 { font-size: 1.25rem; font-weight: 600; margin: 0 0 1.5rem; }
+        
+        .order-items-list { margin-bottom: 1.5rem; }
+        .order-item { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .order-item img { width: 4rem; height: 4rem; object-fit: cover; border-radius: 0.5rem; }
+        .order-item-details { flex-grow: 1; }
+        .order-item-details h3 { font-weight: 600; }
+        .order-item-details p { color: #4b5563; }
+        .order-item-price { font-weight: bold; color: #3B82F6; }
+
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 0.75rem; }
+        .summary-row span:first-child { color: #4b5563; }
+        .summary-row span:last-child { font-weight: 600; }
+        .summary-divider { border-top: 1px solid #e5e7eb; padding-top: 0.75rem; }
+        .summary-total { font-size: 1.125rem; font-weight: bold; }
+        .summary-total span:last-child { color: #3B82F6; font-size: 1.25rem; }
+        
+        /* Buttons & Badges */
+        .btn {
+            display: inline-block; width: 100%; padding: 0.75rem 1.5rem; border-radius: 0.5rem;
+            font-weight: 600; transition: background-color 0.2s; text-align: center;
+        }
+        .btn-primary { background-color: #3B82F6; color: #fff; }
+        .btn-primary:hover { background-color: #2563EB; }
+        .btn-place-order { margin-top: 1.5rem; }
+        
+        .security-badges {
+            margin-top: 1.5rem; display: flex; align-items: center; justify-content: center;
+            gap: 1rem; font-size: 0.875rem; color: #6b7280;
+        }
+        .badge { display: flex; align-items: center; }
+        .badge svg { width: 1rem; height: 1rem; margin-right: 0.25rem; }
+
+        /* Footer */
+        .footer {
+            background-color: #1f2937;
+            color: #d1d5db;
+            padding: 3rem 0;
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        @media (min-width: 768px) {
+            .footer-content {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        .footer-brand .nav-title {
+            color: #fff;
+        }
+        .footer-description {
+            margin-top: 1rem;
+        }
+        .footer-heading {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        .footer-links a:hover {
+            color: #fff;
+            transition: color 0.2s;
+        }
+        .footer-socials {
+            display: flex;
+            gap: 1rem;
+        }
+        .footer-socials a:hover {
+            color: #fff;
+            transition: color 0.2s;
+        }
+        .footer-socials svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            fill: currentColor;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="container nav-content">
+            <a href="index.html" class="nav-brand"><div class="nav-logo">S</div><span class="nav-title">ShopHub</span></a>
+            <div class="nav-links">
+                <a href="index.html">Home</a><a href="products.html">Products</a><a href="about.html">About</a><a href="contact.html">Contact</a>
+            </div>
+            <div class="nav-icons">
+                <a href="search.html" class="nav-icon"><svg><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></a>
+                <a href="cart.html" class="nav-icon">
+                    <svg><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path></svg>
+                    <span id="cart-count">0</span>
+                </a>
+                <button id="mobile-menu-btn" class="mobile-menu-btn"><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
+            </div>
+        </div>
+        <div id="mobile-menu">
+            <a href="index.html">Home</a><a href="products.html">Products</a><a href="about.html">About</a><a href="contact.html">Contact</a>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <h1>Checkout</h1>
+            <p>Complete your order</p>
+        </div>
+    </header>
+
+    <main class="container main-content">
+        <div id="checkout-container">
+            </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="nav-brand">
+                        <div class="nav-logo">S</div>
+                        <span class="nav-title">ShopHub</span>
+                    </div>
+                    <p class="footer-description">Your premier destination for quality products at great prices.</p>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="products.html">Products</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Categories</h3>
+                    <ul class="footer-links">
+                        <li><a href="category.html?category=electronics">Electronics</a></li>
+                        <li><a href="category.html?category=clothing">Clothing</a></li>
+                        <li><a href="category.html?category=home">Home & Garden</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Connect</h3>
+                    <div class="footer-socials">
+                        <a href="#"><svg viewBox="0 0 24 24"><path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/></svg></a>
+                        <a href="#"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                        <a href="#"><svg viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/form-validation.js"></script>
+    <script>
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('show');
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartCount();
+            displayCheckout();
+        });
+
+        function displayCheckout() {
+            const checkoutContainer = document.getElementById('checkout-container');
+            const cartItems = getCart();
+            
+            if (cartItems.length === 0) {
+                checkoutContainer.innerHTML = `<div style="text-align:center; padding: 4rem 0;"><h2>Your cart is empty</h2><p>Add some items to your cart before checkout.</p><a href="products.html" class="btn btn-primary" style="display:inline-block; margin-top:1rem;">Continue Shopping</a></div>`;
+                return;
+            }
+
+            const subtotal = getCartTotal();
+            const shipping = subtotal > 500 ? 0 : 50;
+            const tax = subtotal * 0.08;
+            const total = subtotal + shipping + tax;
+
+            checkoutContainer.innerHTML = `
+                <div class="checkout-layout">
+                    <div class="checkout-form-column">
+                        <form id="checkout-form" novalidate>
+                            <section class="form-section">
+                                <h2>Shipping Information</h2>
+                                <div class="form-grid">
+                                    <div class="form-field"><label for="firstName">First Name *</label><input type="text" id="firstName" name="firstName" required><div class="error-message hidden"></div></div>
+                                    <div class="form-field"><label for="lastName">Last Name *</label><input type="text" id="lastName" name="lastName" required><div class="error-message hidden"></div></div>
+                                    <div class="form-field col-span-2"><label for="email">Email Address *</label><input type="email" id="email" name="email" required><div class="error-message hidden"></div></div>
+                                    <div class="form-field col-span-2"><label for="phone">Phone Number *</label><input type="tel" id="phone" name="phone" required><div class="error-message hidden"></div></div>
+                                    <div class="form-field col-span-2"><label for="address">Street Address *</label><input type="text" id="address" name="address" required><div class="error-message hidden"></div></div>
+                                    <div class="form-field"><label for="city">City *</label><input type="text" id="city" name="city" required><div class="error-message hidden"></div></div>
+                                    <div class="form-field"><label for="state">State *</label>
+                                        <select id="state" name="state" required><option value="">Select State</option><option value="AP">Andhra Pradesh</option><option value="AR">Arunachal Pradesh</option><option value="AS">Assam</option><option value="BR">Bihar</option><option value="CG">Chhattisgarh</option><option value="GA">Goa</option><option value="GJ">Gujarat</option><option value="HR">Haryana</option><option value="HP">Himachal Pradesh</option><option value="JH">Jharkhand</option><option value="KA">Karnataka</option><option value="KL">Kerala</option><option value="MP">Madhya Pradesh</option><option value="MH">Maharashtra</option><option value="MN">Manipur</option><option value="ML">Meghalaya</option><option value="MZ">Mizoram</option><option value="NL">Nagaland</option><option value="OD">Odisha</option><option value="PB">Punjab</option><option value="RJ">Rajasthan</option><option value="SK">Sikkim</option><option value="TN">Tamil Nadu</option><option value="TS">Telangana</option><option value="TR">Tripura</option><option value="UP">Uttar Pradesh</option><option value="UK">Uttarakhand</option><option value="WB">West Bengal</option><option value="AN">Andaman and Nicobar Islands</option><option value="CH">Chandigarh</option><option value="DN">Dadra and Nagar Haveli and Daman and Diu</option><option value="DL">Delhi</option><option value="JK">Jammu and Kashmir</option><option value="LA">Ladakh</option><option value="LD">Lakshadweep</option><option value="PY">Puducherry</option></select>
+                                        <div class="error-message hidden"></div>
+                                    </div>
+                                    <div class="form-field col-span-2"><label for="zipCode">ZIP Code *</label><input type="text" id="zipCode" name="zipCode" required><div class="error-message hidden"></div></div>
+                                </div>
+                            </section>
+                            <section class="form-section">
+                                <h2>Payment Information</h2>
+                                <div class="form-grid">
+                                    <div class="form-field col-span-2"><label for="cardNumber">Card Number *</label><input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" required><div class="error-message hidden"></div></div>
+                                    <div class="form-field"><label for="expiryDate">Expiry Date *</label><input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" required><div class="error-message hidden"></div></div>
+                                    <div class="form-field"><label for="cvv">CVV *</label><input type="text" id="cvv" name="cvv" placeholder="123" required><div class="error-message hidden"></div></div>
+                                    <div class="form-field col-span-2"><label for="cardName">Name on Card *</label><input type="text" id="cardName" name="cardName" required><div class="error-message hidden"></div></div>
+                                </div>
+                            </section>
+                        </form>
+                    </div>
+
+                    <aside>
+                        <div class="order-summary-card">
+                            <h2>Order Summary</h2>
+                            <div class="order-items-list">
+                                ${cartItems.map(item => `<div class="order-item"><img src="${item.image}" alt="${item.name}"><div class="order-item-details"><h3>${item.name}</h3><p>Qty: ${item.quantity}</p></div><p class="order-item-price">₹${(item.price * item.quantity).toFixed(2)}</p></div>`).join('')}
+                            </div>
+                            <div class="summary-rows">
+                                <div class="summary-row"><span>Subtotal</span><span>₹${subtotal.toFixed(2)}</span></div>
+                                <div class="summary-row"><span>Shipping</span><span>${shipping === 0 ? 'Free' : '₹' + shipping.toFixed(2)}</span></div>
+                                <div class="summary-row"><span>Tax</span><span>₹${tax.toFixed(2)}</span></div>
+                                <div class="summary-row summary-divider summary-total"><span>Total</span><span>₹${total.toFixed(2)}</span></div>
+                            </div>
+                            <button onclick="placeOrder()" class="btn btn-primary btn-place-order">Place Order</button>
+                            <div class="security-badges">
+                                <div class="badge"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>Secure Payment</div>
+                                <div class="badge"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>SSL Protected</div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>`;
+            setupFormValidation();
+        }
+
+        function setupFormValidation() {
+            const form = document.getElementById('checkout-form');
+            if (!form) return;
+            const inputs = form.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.addEventListener('blur', () => validateField(input));
+                input.addEventListener('input', () => clearFieldError(input));
+            });
+            // Input formatting event listeners would go here
+        }
+
+        function validateField(field) {
+            const value = field.value.trim();
+            let isValid = true;
+            let errorMessage = '';
+
+            clearFieldError(field);
+
+            if (field.required && !value) {
+                isValid = false;
+                errorMessage = 'This field is required';
+            } else if (field.type === 'email' && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+                isValid = false;
+                errorMessage = 'Please enter a valid email address';
+            }
+            // Add other validations from your form-validation.js here...
+            
+            if (!isValid) {
+                showFieldError(field, errorMessage);
+            }
+            return isValid;
+        }
+
+        function showFieldError(field, message) {
+            field.classList.add('border-red-500');
+            const errorDiv = field.parentNode.querySelector('.error-message');
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('hidden');
+        }
+
+        function clearFieldError(field) {
+            field.classList.remove('border-red-500');
+            const errorDiv = field.parentNode.querySelector('.error-message');
+            errorDiv.classList.add('hidden');
+        }
+
+        function placeOrder() {
+            const form = document.getElementById('checkout-form');
+            if (!form) return;
+            const inputs = form.querySelectorAll('input, select');
+            let isFormValid = true;
+            inputs.forEach(input => {
+                if (!validateField(input)) {
+                    isFormValid = false;
+                }
+            });
+            if (!isFormValid) {
+                alert('Please correct the errors in the form before proceeding.');
+                return;
+            }
+            // Collect data and create order
+            const order = createOrder(new FormData(form)); // Assuming createOrder can take FormData
+            window.location.href = `confirmation.html?orderId=${order.id}`;
+        }
+    </script>
+</body>
+</html>
