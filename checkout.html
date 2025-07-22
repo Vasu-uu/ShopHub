@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout - ShopHub</title>
     <style>
-        /* General Styles */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 0;
@@ -16,8 +15,6 @@
         .container { max-width: 1280px; margin: 0 auto; padding: 0 1rem; }
         ul { list-style: none; padding: 0; margin: 0; }
         button { cursor: pointer; border: none; background: none; }
-
-        /* Navigation */
         .nav {
             background-color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             position: sticky; top: 0; z-index: 50;
@@ -47,15 +44,11 @@
         #mobile-menu { display: none; background-color: #fff; border-top: 1px solid #e5e7eb; }
         #mobile-menu a { display: block; padding: 0.75rem 1rem; color: #4b5563; }
         #mobile-menu.show { display: block; }
-        
-        /* Page Header */
         .page-header {
             background-color: #3B82F6; color: white; padding: 4rem 1rem; text-align: center;
         }
         .page-header h1 { font-size: 2.5rem; font-weight: bold; margin: 0 0 1rem 0; }
         .page-header p { font-size: 1.25rem; opacity: 0.9; margin: 0; }
-        
-        /* Checkout Layout */
         .main-content { padding: 3rem 0; }
         .checkout-layout {
             display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: start;
@@ -63,8 +56,6 @@
         @media (min-width: 1024px) {
             .checkout-layout { grid-template-columns: 7fr 5fr; }
         }
-
-        /* Form Styling */
         .form-section {
             background-color: #fff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             padding: 1.5rem; margin-bottom: 2rem;
@@ -98,17 +89,14 @@
         .hidden {
             display: none;
         }
-        .border-red-500 { /* For JS compatibility */
+        .border-red-500 {
             border-color: #dc2626 !important;
         }
-
-        /* Order Summary Card */
         .order-summary-card {
             background-color: #fff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             padding: 1.5rem; position: sticky; top: 5rem;
         }
         .order-summary-card h2 { font-size: 1.25rem; font-weight: 600; margin: 0 0 1.5rem; }
-        
         .order-items-list { margin-bottom: 1.5rem; }
         .order-item { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
         .order-item img { width: 4rem; height: 4rem; object-fit: cover; border-radius: 0.5rem; }
@@ -116,15 +104,12 @@
         .order-item-details h3 { font-weight: 600; }
         .order-item-details p { color: #4b5563; }
         .order-item-price { font-weight: bold; color: #3B82F6; }
-
         .summary-row { display: flex; justify-content: space-between; margin-bottom: 0.75rem; }
         .summary-row span:first-child { color: #4b5563; }
         .summary-row span:last-child { font-weight: 600; }
         .summary-divider { border-top: 1px solid #e5e7eb; padding-top: 0.75rem; }
         .summary-total { font-size: 1.125rem; font-weight: bold; }
         .summary-total span:last-child { color: #3B82F6; font-size: 1.25rem; }
-        
-        /* Buttons & Badges */
         .btn {
             display: inline-block; width: 100%; padding: 0.75rem 1.5rem; border-radius: 0.5rem;
             font-weight: 600; transition: background-color 0.2s; text-align: center;
@@ -132,15 +117,12 @@
         .btn-primary { background-color: #3B82F6; color: #fff; }
         .btn-primary:hover { background-color: #2563EB; }
         .btn-place-order { margin-top: 1.5rem; }
-        
         .security-badges {
             margin-top: 1.5rem; display: flex; align-items: center; justify-content: center;
             gap: 1rem; font-size: 0.875rem; color: #6b7280;
         }
         .badge { display: flex; align-items: center; }
         .badge svg { width: 1rem; height: 1rem; margin-right: 0.25rem; }
-
-        /* Footer */
         .footer {
             background-color: #1f2937;
             color: #d1d5db;
@@ -225,7 +207,7 @@
 
     <main class="container main-content">
         <div id="checkout-container">
-            </div>
+        </div>
     </main>
 
     <footer class="footer">
@@ -324,7 +306,6 @@
                             </section>
                         </form>
                     </div>
-
                     <aside>
                         <div class="order-summary-card">
                             <h2>Order Summary</h2>
@@ -356,7 +337,6 @@
                 input.addEventListener('blur', () => validateField(input));
                 input.addEventListener('input', () => clearFieldError(input));
             });
-            // Input formatting event listeners would go here
         }
 
         function validateField(field) {
@@ -373,7 +353,6 @@
                 isValid = false;
                 errorMessage = 'Please enter a valid email address';
             }
-            // Add other validations from your form-validation.js here...
             
             if (!isValid) {
                 showFieldError(field, errorMessage);
@@ -408,8 +387,7 @@
                 alert('Please correct the errors in the form before proceeding.');
                 return;
             }
-            // Collect data and create order
-            const order = createOrder(new FormData(form)); // Assuming createOrder can take FormData
+            const order = createOrder(new FormData(form));
             window.location.href = `confirmation.html?orderId=${order.id}`;
         }
     </script>
