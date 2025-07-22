@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Category - ShopHub</title>
     <style>
-        /* General Styles */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 0;
@@ -15,8 +14,6 @@
         a { text-decoration: none; color: inherit; }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 1rem; }
         button { cursor: pointer; border: none; background: none; }
-
-        /* Navigation */
         .nav { background-color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 50; }
         .nav-content { display: flex; justify-content: space-between; align-items: center; height: 4rem; }
         .nav-brand { display: flex; align-items: center; gap: 0.5rem; }
@@ -42,8 +39,6 @@
         #mobile-menu { display: none; background-color: #fff; border-top: 1px solid #e5e7eb; }
         #mobile-menu a { display: block; padding: 0.75rem 1rem; color: #4b5563; }
         #mobile-menu.show { display: block; }
-
-        /* Breadcrumb */
         .breadcrumb-bar { padding: 1rem 0; }
         .breadcrumb { display: flex; align-items: center; list-style: none; padding: 0; margin: 0; gap: 1rem; }
         .breadcrumb li { display: flex; align-items: center; gap: 1rem; }
@@ -51,8 +46,6 @@
         .breadcrumb a:hover { color: #374151; }
         .breadcrumb span { color: #374151; }
         .breadcrumb-separator { color: #d1d5db; width: 1.25rem; height: 1.25rem; }
-
-        /* Category Header */
         .category-header { background-color: #3B82F6; color: white; padding: 4rem 0; }
         .category-header-grid {
             display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: center;
@@ -71,20 +64,16 @@
             max-width: 100%; height: 16rem; object-fit: cover; margin: 0 auto;
         }
         @media (min-width: 1024px) { .category-header-image { text-align: right; } }
-        
-        /* Products Section */
         .products-section { padding: 3rem 0; }
         .product-controls {
             display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;
         }
         #product-count { color: #4b5563; }
         #sort-select { border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 0.5rem 0.75rem; }
-
         #products-grid { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
         @media (min-width: 768px) { #products-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (min-width: 1024px) { #products-grid { grid-template-columns: repeat(3, 1fr); } }
         @media (min-width: 1280px) { #products-grid { grid-template-columns: repeat(4, 1fr); } }
-        
         .card {
             background-color: #fff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             overflow: hidden; transition: box-shadow 0.3s; display: flex; flex-direction: column;
@@ -108,8 +97,6 @@
             text-align: center; background-color: #3B82F6; color: #fff;
         }
         .btn-card:hover { background-color: #2563EB; }
-        
-        /* Footer */
         .footer {
             background-color: #1f2937;
             color: #d1d5db;
@@ -196,7 +183,7 @@
     </div>
 
     <header id="category-header" class="category-header">
-        </header>
+    </header>
 
     <main class="container products-section">
         <div class="product-controls">
@@ -209,7 +196,7 @@
             </select>
         </div>
         <div id="products-grid">
-            </div>
+        </div>
     </main>
 
     <footer class="footer">
