@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Confirmation - ShopHub</title>
     <style>
-        /* General Styles */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 0;
@@ -16,8 +15,6 @@
         .container { max-width: 1024px; margin: 0 auto; padding: 0 1rem; }
         ul { list-style: none; padding: 0; margin: 0; }
         button { cursor: pointer; border: none; background: none; }
-
-        /* Navigation */
         .nav {
             background-color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             position: sticky; top: 0; z-index: 50;
@@ -47,11 +44,7 @@
         #mobile-menu { display: none; background-color: #fff; border-top: 1px solid #e5e7eb; }
         #mobile-menu a { display: block; padding: 0.75rem 1rem; color: #4b5563; }
         #mobile-menu.show { display: block; }
-
-        /* Main Content */
         .main-content { padding: 3rem 0; }
-
-        /* Success Message */
         .success-message { text-align: center; margin-bottom: 3rem; }
         .success-icon {
             width: 5rem; height: 5rem; background-color: #dcfce7; border-radius: 9999px;
@@ -62,8 +55,6 @@
         .success-message h1 { font-size: 1.875rem; font-weight: bold; margin: 0 0 1rem; }
         .success-message p { font-size: 1.25rem; color: #4b5563; margin: 0.5rem 0; }
         .success-message .sub-text { font-size: 1rem; color: #6b7280; }
-
-        /* Order Details */
         .order-details-card {
             background-color: #fff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             padding: 2rem; margin-bottom: 2rem;
@@ -86,8 +77,6 @@
         .order-info-section .total { color: #3B82F6; font-weight: bold; font-size: 1.125rem; }
         .shipping-address p { margin: 0; color: #4b5563; line-height: 1.6; }
         .shipping-address .email { margin-top: 0.5rem; }
-
-        /* Order Items List */
         .order-item {
             display: flex; align-items: center; gap: 1rem; padding: 1rem;
             border: 1px solid #e5e7eb; border-radius: 0.5rem; margin-bottom: 1rem;
@@ -98,8 +87,6 @@
         .order-item-details p { color: #4b5563; margin: 0.25rem 0; }
         .order-item-details .price { color: #3B82F6; font-weight: bold; }
         .order-item-subtotal { text-align: right; font-weight: bold; }
-        
-        /* What's Next Section */
         .whats-next-section {
             background-color: #eff6ff; border-radius: 0.5rem; padding: 2rem; margin-bottom: 2rem;
         }
@@ -116,12 +103,9 @@
         }
         .next-step h3 { font-weight: 600; margin-bottom: 0.5rem; }
         .next-step p { font-size: 0.875rem; color: #4b5563; }
-
-        /* Actions & Support */
         .actions { text-align: center; }
         .actions-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;}
         .actions .email-notice { margin-top: 1rem; font-size: 0.875rem; color: #6b7280; }
-        
         .btn {
             display: inline-block; padding: 0.75rem 2rem; border-radius: 0.5rem;
             font-weight: 600; transition: background-color 0.2s;
@@ -130,7 +114,6 @@
         .btn-primary:hover { background-color: #2563EB; }
         .btn-secondary { background-color: #e5e7eb; color: #1f2937; }
         .btn-secondary:hover { background-color: #d1d5db; }
-        
         .support-box {
             margin-top: 3rem; padding: 1.5rem; background-color: #f3f4f6;
             border-radius: 0.5rem; text-align: center;
@@ -139,8 +122,6 @@
         .support-box p { color: #4b5563; margin-bottom: 1rem; }
         .support-box a { color: #3B82F6; font-weight: 500; }
         .support-box a:hover { color: #2563EB; }
-        
-        /* Footer */
         .footer {
             background-color: #1f2937;
             color: #d1d5db;
@@ -219,7 +200,7 @@
 
     <main class="container main-content">
         <div id="confirmation-container">
-            </div>
+        </div>
     </main>
 
     <footer class="footer">
