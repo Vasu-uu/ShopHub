@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ShopHub - Premium Online Store</title>
     <style>
-        /* General Styles */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 0;
@@ -21,8 +20,6 @@
             margin: 0 auto;
             padding: 0 1rem;
         }
-
-        /* Navigation */
         .nav {
             background-color: #fff;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
@@ -134,8 +131,6 @@
         #mobile-menu.show {
             display: block;
         }
-
-        /* Hero Section */
         .hero {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #fff;
@@ -176,8 +171,6 @@
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        /* Sections */
         .section {
             padding: 4rem 0;
         }
@@ -211,8 +204,6 @@
                 grid-template-columns: repeat(3, 1fr);
             }
         }
-
-        /* Cards (Category & Product) */
         .card {
             background-color: #fff;
             border-radius: 0.5rem;
@@ -279,8 +270,6 @@
             justify-content: space-between;
             align-items: center;
         }
-        
-        /* Buttons */
         .btn {
             display: inline-block;
             padding: 0.75rem 2rem;
@@ -301,8 +290,6 @@
         .btn-full {
             width: 100%;
         }
-
-        /* Features Section */
         .feature {
             text-align: center;
             padding: 1.5rem;
@@ -332,8 +319,6 @@
         .feature-description {
             color: #4b5563;
         }
-
-        /* Footer */
         .footer {
             background-color: #1f2937;
             color: #d1d5db;
@@ -386,8 +371,6 @@
             height: 1.5rem;
             fill: currentColor;
         }
-
-        /* Scroll to Top Button */
         #scroll-top {
             position: fixed;
             bottom: 1rem;
@@ -399,7 +382,7 @@
             border-radius: 9999px;
             border: none;
             cursor: pointer;
-            display: none; /* Hidden by default */
+            display: none;
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -411,8 +394,6 @@
             width: 1.25rem;
             height: 1.25rem;
         }
-
-        /* Helper */
         .text-center {
             text-align: center;
         }
@@ -480,7 +461,7 @@
         <div class="container">
             <h2 class="section-title">Shop by Category</h2>
             <div id="categories-grid" class="grid-container grid-container-4">
-                </div>
+            </div>
         </div>
     </section>
 
@@ -488,7 +469,7 @@
         <div class="container">
             <h2 class="section-title">Latest Products</h2>
             <div id="latest-products" class="grid-container grid-container-4">
-                </div>
+            </div>
             <div class="text-center mt-12">
                 <a href="products.html" class="btn btn-primary">
                     View All Products
@@ -570,7 +551,6 @@
         </div>
     </footer>
 
-
     <button id="scroll-top">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
@@ -580,12 +560,10 @@
     <script src="js/data.js"></script>
     <script src="js/cart.js"></script>
     <script>
-        // Mobile menu toggle
         document.getElementById('mobile-menu-btn').addEventListener('click', function() {
             document.getElementById('mobile-menu').classList.toggle('show');
         });
 
-        // Scroll to top functionality
         const scrollTopBtn = document.getElementById('scroll-top');
         window.addEventListener('scroll', function() {
             if (window.pageYOffset > 300) {
@@ -599,7 +577,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // Load categories and products
         document.addEventListener('DOMContentLoaded', function() {
             loadCategories();
             loadLatestProducts();
