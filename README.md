@@ -13,8 +13,8 @@
 
 ## 🛠️ Tech Stack
 - HTML5
-- Tailwind CSS
-- JavaScript (ES6)
+- CSS
+- JavaScript 
 - GitHub Pages (for hosting)
 
 ## ✨ Contribution
